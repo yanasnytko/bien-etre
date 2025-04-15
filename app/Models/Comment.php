@@ -36,4 +36,18 @@ class Comment extends Model
     {
         return $this->hasMany(Abuse::class);
     }
+
+    public function report($id)
+    {
+        $comment = Comment::findOrFail($id);
+        // Vous pouvez enregistrer ce signalement dans une table ou déclencher une notification.
+        // Par exemple :
+        $comment->reports()->create([
+            'reported_by_user_id' => auth()->id(),
+            'reason' => request('reason') ?? 'Signalement effectué via le site.',
+        ]);
+
+        return redirect()->back()->with('success', 'Le commentaire a été signalé.');
+    }
+
 }

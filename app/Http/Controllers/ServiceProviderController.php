@@ -42,7 +42,14 @@ class ServiceProviderController extends Controller
      */
     public function show($id)
     {
-        $serviceProvider = ServiceProvider::findOrFail($id);
+        // Charge également la relation 'comments' (et éventuellement 'comments.user' pour obtenir le nom de l'auteur)
+        $serviceProvider = ServiceProvider::with([
+            'comments' => function($query) {
+                $query->doesntHave('abuses');
+            },
+            'comments.user'
+        ])->findOrFail($id);
+    
         return view('service-providers.show', compact('serviceProvider'));
     }
 

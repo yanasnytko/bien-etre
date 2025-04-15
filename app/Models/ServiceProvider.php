@@ -45,4 +45,9 @@ class ServiceProvider extends Model
     {
         return $this->hasMany(Promotion::class);
     }
+
+    public function comments()
+    {
+        return $this->hasMany(\App\Models\Comment::class);
+    }
 }
