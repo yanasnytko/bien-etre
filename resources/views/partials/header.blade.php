@@ -8,7 +8,6 @@
     </div>
     <!-- Menu de navigation Desktop -->
     <nav class="hidden md:flex space-x-6">
-      <a href="{{ route('dashboard') }}" class="text-gray-600 hover:text-blue-600">Dashboard</a>
       <a href="{{ route('service-providers.index') }}" class="text-gray-600 hover:text-blue-600">Prestataires</a>
       <a href="{{ route('services.index') }}" class="text-gray-600 hover:text-blue-600">Services</a>
       <a href="{{ route('stages.index') }}" class="text-gray-600 hover:text-blue-600">Stages</a>
