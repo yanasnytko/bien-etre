@@ -122,13 +122,13 @@ Jetstream est déjà installé et configuré avec Livewire pour gérer l'inscrip
 ## Seeders et Factories
 
 Chaque entité dispose d'une Factory (située dans **database/factories**) et d'un Seeder correspondant (dans **database/seeders**) pour générer des données de test.  
-Pour peupler ta base de données, exécute :
+**Pour peupler ta base de données, exécute :**
     ```bash
     php artisan migrate:fresh --seed
 
 ## Tests
 Des tests unitaires et d'intégration sont recommandés pour garantir la robustesse de l'application.
-Lance-les avec :
+**Lance-les avec :**
     ```bash
     php artisan test
 
