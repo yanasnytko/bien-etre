@@ -10,7 +10,7 @@ class CategorieProposalController extends Controller
 {
     public function index()
     {
-        $proposals = CategorieProposal::all();
+        $proposals = CategorieProposal::paginate(12);
         return view('categorie-proposals.index', compact('proposals'));
     }
 
