@@ -67,28 +67,39 @@ Une interface d'administration permet une gestion globale de l'annuaire.
 ### Étapes d'installation
 
 1. **Cloner le dépôt GitHub :**
-   ```bash
+
+   ```console
    git clone https://github.com/ton-compte/bien-etre.git
    cd bien-etre
+   ```
 
 2. **Installer les dépendances PHP :**
-    ```bash
+
+    ```console
     composer install
+    ```
 
 3. **Installer les dépendances JavaScript :**
-    ```bash
+
+    ```console
     npm install
     npm run dev
+    ```
 
 4. **Créer le fichier .env :**
-    ```bash
+
+    ```console
     cp .env.example .env
     php artisan key:generate
+    ```
+
 Configure ensuite les variables d'environnement (base de données, mail, etc.) dans le fichier .env.
 
 5. **Exécuter les migrations et seeders :**
-    ```bash
+
+    ```console
     php artisan migrate:fresh --seed
+    ```
 
 6. **Configurer Jetstream et l'authentification :**
 Jetstream est déjà installé et configuré avec Livewire pour gérer l'inscription, la connexion et la gestion du profil.
@@ -123,22 +134,28 @@ Jetstream est déjà installé et configuré avec Livewire pour gérer l'inscrip
 
 Chaque entité dispose d'une Factory (située dans **database/factories**) et d'un Seeder correspondant (dans **database/seeders**) pour générer des données de test.  
 **Pour peupler ta base de données, exécute :**
-    ```bash
+
+    ```console
     php artisan migrate:fresh --seed
+    ```
 
 ## Tests
 Des tests unitaires et d'intégration sont recommandés pour garantir la robustesse de l'application.
 **Lance-les avec :**
-    ```bash
-    php artisan test
+
+    ```console
+    php artisan test 
+    ```
 
 ## Déploiement
 - **Prépare ton environnement de production :** 
 Configure tes variables d'environnement dans le fichier .env de production ainsi que les autres paramètres de configuration du serveur.
 
 - **Compile les assets en production avec :**
-    ```bash
+
+    ```console
     npm run build
+    ```
 
 - **Configure ton serveur web :** 
 Assure-toi que le serveur (Nginx, Apache, etc.) pointe vers le dossier public/ de ton application Laravel.
@@ -154,8 +171,10 @@ Pour contribuer :
 3. Fais tes modifications et commit-les.
 
 4. Pousse la branche sur ton fork.
-    ```bash
+
+    ```console
     git push -u origin feature/nouvelle-fonctionnalite
+    ```
 
 5. Ouvre une Pull Request sur le dépôt principal.
 
