@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\ServiceProvider;
+use App\Models\Service;
+use App\Models\Promotion;
 
 class HomeController extends Controller
 {
-    // Affiche la page d'accueil
     public function index()
     {
-        return view('home'); // La vue se trouve dans resources/views/home.blade.php
+        // Récupérer quelques éléments pour chaque section
+        $serviceProviders = ServiceProvider::latest()->limit(8)->get();
+        $services = Service::latest()->limit(8)->get();
+        $promotions = Promotion::latest()->limit(8)->get();
+
+        return view('home', compact('serviceProviders', 'services', 'promotions'));
     }
 }

@@ -13,7 +13,7 @@ class ServiceProviderController extends Controller
      */
     public function index()
     {
-        $serviceProviders = ServiceProvider::all();
+        $serviceProviders = ServiceProvider::paginate(12);
         return view('service-providers.index', compact('serviceProviders'));
     }
 

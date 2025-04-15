@@ -10,7 +10,7 @@ class PromotionController extends Controller
 {
     public function index()
     {
-        $promotions = Promotion::all();
+        $promotions = Promotion::paginate(12);
         return view('promotions.index', compact('promotions'));
     }
 

@@ -1,21 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
-    <h2>Détails du Commentaire</h2>
-    <div class="card mb-3">
-        <div class="card-body">
-            <h3>{{ $comment->title }}</h3>
-            <p>{{ $comment->content }}</p>
-            <p><strong>Note :</strong> {{ $comment->rating }}</p>
-            <p><strong>Date :</strong> {{ $comment->date }}</p>
-        </div>
-    </div>
+<div class="container mx-auto px-4 py-8">
+  <a href="{{ route('comments.index') }}" class="text-blue-600 hover:underline mb-4 inline-block">&larr; Retour</a>
 
-    <a href="{{ route('comments.edit', $comment->id) }}" class="btn btn-warning">Modifier</a>
-    <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" style="display:inline;">
-        @csrf
-        @method('DELETE')
-        <button type="submit" class="btn btn-danger" onclick="return confirm('Confirmer la suppression ?');">Supprimer</button>
-    </form>
-    <a href="{{ route('comments.index') }}" class="btn btn-secondary">Retour à la liste</a>
+  <div class="bg-white rounded-lg shadow p-6">
+    <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ $comment->title }}</h1>
+    
+    <p class="text-gray-600 mb-2"><strong>Contenu :</strong></p>
+    <p class="text-gray-700 mb-4">{{ $comment->content }}</p>
+    
+    @if($comment->rating)
+      <p class="text-gray-600 mb-2"><strong>Note :</strong> {{ $comment->rating }}/5</p>
+    @endif
+
+    <div class="mt-4 text-sm text-gray-500">
+      <p><strong>Par :</strong> {{ $comment->user->name ?? 'Anonyme' }}</p>
+      <p><strong>Le :</strong> {{ $comment->created_at->format('d/m/Y') }}</p>
+    </div>
+  </div>
+</div>
 @endsection

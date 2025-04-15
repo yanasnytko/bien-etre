@@ -10,7 +10,7 @@ class StageController extends Controller
 {
     public function index()
     {
-        $stages = Stage::all();
+        $stages = Stage::paginate(12);
         return view('stages.index', compact('stages'));
     }
 
