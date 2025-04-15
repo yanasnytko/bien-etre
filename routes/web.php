@@ -10,6 +10,7 @@ use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CategorieProposalController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AbuseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,4 +58,11 @@ Route::post('/test-register', function (\Illuminate\Http\Request $request) {
 Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('/user/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::patch('/user/profile', [ProfileController::class, 'update'])->name('profile.update');
+});
+
+Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+Route::post('/comments/{comment}/report', [CommentController::class, 'report'])->name('comments.report');
+
+Route::middleware(['auth', 'can:manage-abuses'])->group(function () {
+    Route::resource('abuses', AbuseController::class)->except(['create', 'store', 'edit']);
 });

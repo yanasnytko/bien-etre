@@ -55,6 +55,22 @@
                class="w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-600">
       </div>
 
+      <!-- Choix du type d'utilisateur -->
+      <div class="mb-4">
+        <span class="block font-semibold mb-1">Type de compte</span>
+        <label class="inline-flex items-center mr-4">
+          <input type="radio" name="user_type" value="user" {{ old('user_type', 'user') == 'user' ? 'checked' : '' }} class="mr-2">
+          <span>User</span>
+        </label>
+        <label class="inline-flex items-center">
+          <input type="radio" name="user_type" value="provider" {{ old('user_type') == 'provider' ? 'checked' : '' }} class="mr-2">
+          <span>Prestataire</span>
+        </label>
+        @error('user_type')
+          <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+        @enderror
+      </div>
+
       @if(\Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
         <div class="mb-4">
           <label class="flex items-center">

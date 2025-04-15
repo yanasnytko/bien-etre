@@ -24,6 +24,7 @@ class CreateNewUser implements CreatesNewUsers
             'lastname'  => ['required', 'string', 'max:255'],
             'email'     => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password'  => $this->passwordRules(),
+            'user_type' => ['required', 'in:user,provider'], // Validation pour user_type
         ])->validate();
 
         return User::create([
@@ -32,10 +33,10 @@ class CreateNewUser implements CreatesNewUsers
             'email'         => $input['email'],
             'password'      => Hash::make($input['password']),
             'register_date' => now(),
-            'user_type'     => 'user',      // Valeur par défaut
-            'newsletter'    => false,       // Par défaut, non abonné
-            'trials'        => 0,           // Par défaut à zéro
-            'is_provider'   => false,
+            'user_type'     => $input['user_type'],   // Insérer le type choisi
+            'newsletter'    => false,                  // Valeur par défaut
+            'trials'        => 0,                      // Valeur par défaut
+            'is_provider'   => $input['user_type'] === 'provider', // On peut le déterminer ici
             'is_banned'     => false,
             'is_verified'   => false,
             'is_active'     => true,
