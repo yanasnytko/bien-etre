@@ -40,6 +40,11 @@ class CreateNewUser implements CreatesNewUsers
             'is_banned'     => false,
             'is_verified'   => false,
             'is_active'     => true,
+            // Champs d'adresse :
+            'street'        => $input['street'] ?? null,
+            'number'        => $input['number'] ?? null,
+            'city'          => $input['city'] ?? null,
+            'postal_code'   => $input['postal_code'] ?? null,
         ]);
     }
 }

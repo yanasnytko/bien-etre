@@ -69,9 +69,30 @@
         @error('user_type')
           <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
         @enderror
-      </div>
+    </div>
 
-      @if(\Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
+    <div class="mb-4">
+        <label for="street" class="block font-semibold mb-1">Rue</label>
+        <input id="street" type="text" name="street" value="{{ old('street') }}"
+                class="w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-600">
+    </div>
+        <div class="mb-4">
+        <label for="number" class="block font-semibold mb-1">Numéro</label>
+        <input id="number" type="text" name="number" value="{{ old('number') }}"
+                class="w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-600">
+    </div>
+        <div class="mb-4">
+        <label for="city" class="block font-semibold mb-1">Ville</label>
+        <input id="city" type="text" name="city" value="{{ old('city') }}"
+                class="w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-600">
+    </div>
+    <div class="mb-4">
+        <label for="postal_code" class="block font-semibold mb-1">Code Postal</label>
+        <input id="postal_code" type="text" name="postal_code" value="{{ old('postal_code') }}"
+                class="w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-600">
+    </div>
+
+    @if(\Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
         <div class="mb-4">
           <label class="flex items-center">
             <input type="checkbox" name="terms" id="terms" class="mr-2" required>

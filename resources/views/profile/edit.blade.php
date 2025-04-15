@@ -5,7 +5,6 @@
   <div class="bg-white rounded-lg shadow p-6 w-full max-w-lg">
     <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">Modifier Mon Profil</h1>
     
-    {{-- Affichage des erreurs de validation, si présentes --}}
     @if ($errors->any())
       <div class="mb-4">
         <ul class="list-disc list-inside text-red-600">
@@ -20,28 +19,24 @@
       @csrf
       @method('PATCH')
 
-      <!-- Prénom -->
+      <!-- Infos personnelles -->
       <div class="mb-4">
         <label for="firstname" class="block font-semibold mb-1">Prénom</label>
         <input type="text" name="firstname" id="firstname" value="{{ old('firstname', Auth::user()->firstname) }}" required
                class="w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-600">
       </div>
-
-      <!-- Nom -->
       <div class="mb-4">
         <label for="lastname" class="block font-semibold mb-1">Nom</label>
         <input type="text" name="lastname" id="lastname" value="{{ old('lastname', Auth::user()->lastname) }}" required
                class="w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-600">
       </div>
-
-      <!-- Adresse Email -->
       <div class="mb-4">
         <label for="email" class="block font-semibold mb-1">Adresse Email</label>
         <input type="email" name="email" id="email" value="{{ old('email', Auth::user()->email) }}" required
                class="w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-600">
       </div>
-      
-      <!-- Photo de Profil (si la fonctionnalité est activée via Jetstream) -->
+
+      <!-- Gestion de la photo de profil si activée -->
       @if(\Laravel\Jetstream\Jetstream::managesProfilePhotos())
       <div class="mb-4">
         <label for="profile_photo" class="block font-semibold mb-1">Photo de Profil</label>
@@ -54,6 +49,33 @@
         @endif
       </div>
       @endif
+
+      <!-- Gestion de l'adresse -->
+      <h2 class="text-xl font-bold text-gray-800 mt-6 mb-4">Adresse</h2>
+      <div class="mb-4">
+        <label for="street" class="block font-semibold mb-1">Rue</label>
+        <input type="text" name="street" id="street" value="{{ old('street', Auth::user()->address->street ?? '') }}"
+               class="w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-600">
+      </div>
+      <div class="mb-4">
+        <label for="number" class="block font-semibold mb-1">Numéro</label>
+        <input type="text" name="number" id="number" value="{{ old('number', Auth::user()->address->number ?? '') }}"
+               class="w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-600">
+      </div>
+      
+      <!-- Si vous avez une relation vers la localité via un champ localite_id dans la table addresses, vous pouvez ajouter un select -->
+      <div class="mb-4">
+        <label for="localite_id" class="block font-semibold mb-1">Localité</label>
+        <select name="localite_id" id="localite_id" class="w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-600">
+          <option value="">-- Sélectionnez une localité --</option>
+          @foreach($localites as $localite)
+            <option value="{{ $localite->id }}"
+              {{ old('localite_id', Auth::user()->address->localite_id ?? '') == $localite->id ? 'selected' : '' }}>
+              {{ $localite->city }}
+            </option>
+          @endforeach
+        </select>
+      </div>
 
       <!-- Bouton de soumission -->
       <div>

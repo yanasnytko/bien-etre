@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreServiceProviderRequest;
 use App\Http\Requests\UpdateServiceProviderRequest;
 use App\Models\ServiceProvider;
@@ -90,5 +91,46 @@ class ServiceProviderController extends Controller
         $serviceProvider->delete();
         return redirect()->route('service-providers.index')
                          ->with('success', 'Prestataire supprimé');
+    }
+
+    /**
+     * Recherche des prestataires selon divers critères.
+     */
+    public function search(Request $request)
+    {
+        // Commencer la requête sur le modèle ServiceProvider
+        $query = ServiceProvider::query();
+
+        // Filtre par catégorie de service (on suppose que la relation "services" existe)
+        if ($request->filled('service_id')) {
+            $serviceId = $request->input('service_id');
+            $query->whereHas('services', function($q) use ($serviceId) {
+                $q->where('services.id', $serviceId);
+            });
+        }
+
+        // Filtre par localité
+        // On suppose ici que le prestataire a une relation vers son adresse ou localité
+        // Si vous avez une relation par exemple "address.localite"
+        if ($request->filled('localite')) {
+            $localite = $request->input('localite');
+            $query->whereHas('address.localite', function($q) use ($localite) {
+                $q->where('city', 'like', '%' . $localite . '%');
+            });
+        }
+
+        // Filtre par nom du prestataire
+        if ($request->filled('name')) {
+            $name = $request->input('name');
+            $query->where('company_name', 'like', '%' . $name . '%');
+        }
+
+        // Si aucun critère n'est renseigné, la requête retourne tous les prestataires
+        // paginer les résultats (par exemple, 12 par page)
+        $serviceProviders = $query->paginate(12);
+
+        // Retourner la vue index avec les prestataires filtrés.
+        // Vous pouvez utiliser la même vue que pour l'index classique.
+        return view('service-providers.index', compact('serviceProviders'));
     }
 }

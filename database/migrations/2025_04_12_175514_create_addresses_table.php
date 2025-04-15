@@ -17,12 +17,17 @@ return new class extends Migration
             $table->string('number', 10)->nullable();
             $table->boolean('is_active')->default(true);
             $table->unsignedBigInteger('localite_id');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
 
             $table->foreign('localite_id')
                   ->references('id')
                   ->on('localites')
                   ->onDelete('cascade');
+
+            $table->foreign('user_id')
+                ->references('id')->on('users')
+                ->onDelete('cascade');
         });
     }
 
