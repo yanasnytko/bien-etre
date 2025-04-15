@@ -48,17 +48,17 @@
           <a href="{{ route('promotions.show', $promotion->id) }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
             Voir
           </a>
-          <a href="{{ route('promotions.edit', $promotion->id) }}" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
+          <!--<a href="{{ route('promotions.edit', $promotion->id) }}" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
             Modifier
-          </a>
+          </a> -->
           <!-- Formulaire de suppression avec confirmation -->
-          <form action="{{ route('promotions.destroy', $promotion->id) }}" method="POST" onsubmit="return confirm('Confirmez-vous la suppression ?')">
+          <!--<form action="{{ route('promotions.destroy', $promotion->id) }}" method="POST" onsubmit="return confirm('Confirmez-vous la suppression ?')">
             @csrf
             @method('DELETE')
             <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">
               Supprimer
             </button>
-          </form>
+          </form>-->
         </div>
       </div>
     @endforeach

@@ -34,13 +34,64 @@
             <h2 class="text-xl font-semibold text-gray-700 mb-1">Catégories associées</h2>
             <ul class="list-disc list-inside text-gray-600">
               @foreach($serviceProvider->services as $service)
-                <li>{{ $service->name }}</li>
+              <li>
+                <a href="{{ route('services.show', $service->id) }}" class="text-blue-600 hover:underline">
+                  {{ $service->name }}
+                </a>
+              </li>
               @endforeach
             </ul>
           </div>
         @endif
+        
       </div>
     </div>
+  </div>
+
+  <!-- Section des Stages -->
+  <div class="bg-white rounded-lg shadow p-6 mb-8 mt-5">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">Stages proposés</h2>
+    @if($serviceProvider->stages->isNotEmpty())
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @foreach($serviceProvider->stages as $stage)
+          <div class="bg-gray-100 rounded p-4">
+            <h3 class="text-xl font-bold mb-2">{{ $stage->name }}</h3>
+            <p class="text-gray-700">{{ \Illuminate\Support\Str::limit($stage->description, 100) }}</p>
+            <p class="text-gray-600 mt-2">
+              Du {{ \Carbon\Carbon::parse($stage->date_start)->format('d/m/Y') }} au {{ \Carbon\Carbon::parse($stage->date_end)->format('d/m/Y') }}
+            </p>
+            <a href="{{ route('stages.show', $stage->id) }}" class="mt-4 inline-block text-blue-600 hover:underline">
+              En savoir plus
+            </a>
+          </div>
+        @endforeach
+      </div>
+    @else
+      <p>Aucun stage n'est proposé actuellement.</p>
+    @endif
+  </div>
+
+  <!-- Section des Promotions -->
+  <div class="bg-white rounded-lg shadow p-6 mb-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">Promotions</h2>
+    @if($serviceProvider->promotions->isNotEmpty())
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @foreach($serviceProvider->promotions as $promotion)
+          <div class="bg-gray-100 rounded p-4">
+            <h3 class="text-xl font-bold mb-2">{{ $promotion->title }}</h3>
+            <p class="text-gray-700">{{ \Illuminate\Support\Str::limit($promotion->description, 100) }}</p>
+            <p class="text-gray-600 mt-2">
+              Du {{ \Carbon\Carbon::parse($promotion->date_start)->format('d/m/Y') }} au {{ \Carbon\Carbon::parse($promotion->date_end)->format('d/m/Y') }}
+            </p>
+            <a href="{{ route('promotions.show', $promotion->id) }}" class="mt-4 inline-block text-blue-600 hover:underline">
+              En savoir plus
+            </a>
+          </div>
+        @endforeach
+      </div>
+    @else
+      <p>Aucune promotion n'est proposée actuellement.</p>
+    @endif
   </div>
 
   <!-- Section Commentaires -->

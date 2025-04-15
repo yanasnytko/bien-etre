@@ -45,10 +45,13 @@ class ServiceProviderController extends Controller
     {
         // Charge également la relation 'comments' (et éventuellement 'comments.user' pour obtenir le nom de l'auteur)
         $serviceProvider = ServiceProvider::with([
-            'comments' => function($query) {
+            'comments' => function ($query) {
                 $query->doesntHave('abuses');
             },
-            'comments.user'
+            'comments.user',
+            'stages',         // charge les stages associés
+            'promotions',     // charge les promotions associées
+            'services'        // si vous souhaitez aussi charger les services associés pour les catégories par exemple
         ])->findOrFail($id);
     
         return view('service-providers.show', compact('serviceProvider'));
@@ -70,6 +73,10 @@ class ServiceProviderController extends Controller
     {
         $serviceProvider = ServiceProvider::findOrFail($id);
 
+        if (!auth()->check()) {
+            // Par exemple, rediriger vers la page de connexion ou afficher un message personnalisé
+            return redirect()->route('login')->with('error', 'Vous devez être connecté pour effectuer cette opération.');
+        }
         // On vérifie ici avec la policy que l'utilisateur authentifié peut mettre à jour ce prestataire.
         if (auth()->user()->cannot('update', $serviceProvider)) {
             abort(403, 'Vous n\'êtes pas autorisé à modifier ce prestataire.');

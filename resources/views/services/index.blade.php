@@ -29,7 +29,7 @@
           <a href="{{ route('services.show', $service->id) }}" class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
             Voir
           </a>
-          <a href="{{ route('services.edit', $service->id) }}" class="inline-block bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
+          <!-- <a href="{{ route('services.edit', $service->id) }}" class="inline-block bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
             Modifier
           </a>
           <form action="{{ route('services.destroy', $service->id) }}" method="POST" onsubmit="return confirm('Confirmez-vous la suppression de ce service ?')">
@@ -38,7 +38,7 @@
             <button type="submit" class="inline-block bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">
               Supprimer
             </button>
-          </form>
+          </form> -->
         </div>
       </div>
     @endforeach

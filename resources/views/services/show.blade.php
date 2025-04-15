@@ -22,5 +22,30 @@
       <p class="text-gray-600">Aucune description disponible.</p>
     @endif
   </div>
+
+  <div class="bg-white rounded-lg shadow p-6 mt-5">
+    <h2 class="text-2xl font-bold mb-4">Prestataires proposant ce service</h2>
+
+    @if($service->serviceProviders->isNotEmpty())
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        @foreach($service->serviceProviders as $provider)
+          <div class="bg-gray-100 rounded p-4">
+            <!-- Vous pouvez afficher une image, le nom et d'autres infos du prestataire -->
+            <h3 class="text-xl font-bold mb-2">{{ $provider->company_name }}</h3>
+            <p class="text-gray-600 text-sm mb-2">{{ $provider->description }}</p>
+            <a href="{{ route('service-providers.show', $provider->id) }}"
+               class="text-blue-600 hover:underline text-sm">
+               Voir le profil
+            </a>
+          </div>
+        @endforeach
+      </div>
+      <div class="mt-4">
+        {{ $serviceProviders->links() }}
+      </div>
+    @else
+      <p>Aucun prestataire ne propose ce service actuellement.</p>
+    @endif
+  </div>
 </div>
 @endsection

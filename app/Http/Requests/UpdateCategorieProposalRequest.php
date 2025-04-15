@@ -21,4 +21,15 @@ class UpdateCategorieProposalRequest extends FormRequest
             'status'        => 'in:pending,approved,rejected',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'proposed_name.required' => 'Le nom de la proposition est obligatoire.',
+            'proposed_name.string'   => 'Le nom de la proposition doit être une chaîne de caractères.',
+            'proposed_name.max'      => 'Le nom de la proposition ne doit pas dépasser 255 caractères.',
+            'description.string'     => 'La description doit être une chaîne de caractères.',
+            'status.in'              => 'Le statut doit être "pending", "approved" ou "rejected".',
+        ];
+    }
 }
