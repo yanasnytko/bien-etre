@@ -3,9 +3,10 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Laravel\Fortify\Features;
 use Laravel\Jetstream\Jetstream;
+use Laravel\Fortify\Features;
 use Tests\TestCase;
+use App\Models\User;
 
 class RegistrationTest extends TestCase
 {
@@ -18,7 +19,6 @@ class RegistrationTest extends TestCase
         }
 
         $response = $this->get('/register');
-
         $response->assertStatus(200);
     }
 
@@ -29,7 +29,6 @@ class RegistrationTest extends TestCase
         }
 
         $response = $this->get('/register');
-
         $response->assertStatus(404);
     }
 
@@ -39,15 +38,27 @@ class RegistrationTest extends TestCase
             $this->markTestSkipped('Registration support is not enabled.');
         }
 
+        // Désactive temporairement le middleware de vérification d'e-mail pour ce test.
+        $this->withoutMiddleware(\Illuminate\Auth\Middleware\EnsureEmailIsVerified::class);
+
         $response = $this->post('/register', [
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => 'password',
+            'firstname'             => 'Test',
+            'lastname'              => 'User',
+            'email'                 => 'test@example.com',
+            'password'              => 'password',
             'password_confirmation' => 'password',
-            'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature(),
+            'terms'                 => Jetstream::hasTermsAndPrivacyPolicyFeature(),
         ]);
 
+        // Vérifie que l'utilisateur est maintenant authentifié
         $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard', absolute: false));
+        $response->assertRedirect(route('dashboard', [], false));
+
+        // Vérifie que l'utilisateur a bien été stocké en base
+        $this->assertDatabaseHas('users', [
+            'email'     => 'test@example.com',
+            'firstname' => 'Test',
+            'lastname'  => 'User',
+        ]);
     }
 }

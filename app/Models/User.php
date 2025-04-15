@@ -73,4 +73,22 @@ class User extends Authenticatable
         'is_verified'       => 'boolean',
         'is_active'         => 'boolean',
     ];
+
+    public function getNameAttribute()
+    {
+        return $this->firstname . ' ' . $this->lastname;
+    }
+
+    public function setNameAttribute($value)
+    {
+        $parts = explode(' ', trim($value), 2);
+        $this->attributes['firstname'] = $parts[0] ?? '';
+        $this->attributes['lastname']  = $parts[1] ?? '';
+    }
+
+    public function serviceProvider()
+    {
+        return $this->hasOne(\App\Models\ServiceProvider::class);
+    }
+
 }
