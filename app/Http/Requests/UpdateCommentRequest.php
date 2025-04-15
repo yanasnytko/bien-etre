@@ -22,4 +22,26 @@ class UpdateCommentRequest extends FormRequest
             'is_abusive' => 'sometimes|boolean',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'title.required'      => 'Le titre du commentaire est obligatoire.',
+            'title.string'        => 'Le titre doit être une chaîne de caractères.',
+            'title.max'           => 'Le titre ne doit pas dépasser 150 caractères.',
+
+            'content.required'    => 'Le contenu du commentaire est obligatoire.',
+            'content.string'      => 'Le contenu doit être une chaîne de caractères.',
+
+            'date.required'       => 'La date est obligatoire.',
+            'date.date'           => 'La date doit être une date valide.',
+
+            'rating.integer'      => 'La note doit être un entier.',
+            'rating.min'          => 'La note ne peut être inférieure à 0.',
+            'rating.max'          => 'La note ne peut être supérieure à 5.',
+
+            'is_abusive.boolean'  => "Le statut 'abusive' doit être de type booléen.",
+        ];
+    }
+
 }

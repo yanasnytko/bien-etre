@@ -49,6 +49,26 @@
                class="w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-600">
       </div>
 
+      <!-- Champ pour display_start -->
+      <div class="mb-4">
+          <label for="display_start" class="block font-semibold mb-1">Date de début d'affichage</label>
+          <input type="date" name="display_start" id="display_start" value="{{ old('display_start', $stage->display_start ? $stage->display_start->format('Y-m-d') : '') }}"
+                class="w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-600">
+          @error('display_start')
+              <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+          @enderror
+      </div>
+
+      <!-- Champ pour display_end -->
+      <div class="mb-4">
+          <label for="display_end" class="block font-semibold mb-1">Date de fin d'affichage</label>
+          <input type="date" name="display_end" id="display_end" value="{{ old('display_end', $stage->display_end ? $stage->display_end->format('Y-m-d') : '') }}"
+                class="w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-600">
+          @error('display_end')
+              <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+          @enderror
+      </div>
+
       <div class="mb-4">
         <label for="cost" class="block font-semibold mb-1">Coût</label>
         <input type="number" name="cost" id="cost" step="0.01" value="{{ old('cost', $stage->cost) }}"

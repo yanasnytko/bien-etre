@@ -25,4 +25,34 @@ class UpdatePromotionRequest extends FormRequest
             'is_active'     => 'sometimes|boolean',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'title.required'         => 'Le titre de la promotion est obligatoire.',
+            'title.string'           => 'Le titre doit être une chaîne de caractères.',
+            'title.max'              => 'Le titre ne doit pas dépasser 255 caractères.',
+
+            'description.string'     => 'La description doit être une chaîne de caractères.',
+
+            'pdf.file'               => 'Le document doit être un fichier.',
+            'pdf.mimes'              => 'Le document doit être au format PDF uniquement.',
+
+            'date_start.required'    => 'La date de début est obligatoire.',
+            'date_start.date'        => 'La date de début doit être une date valide.',
+
+            'date_end.required'      => 'La date de fin est obligatoire.',
+            'date_end.date'          => 'La date de fin doit être une date valide.',
+            'date_end.after_or_equal' => 'La date de fin doit être égale ou postérieure à la date de début.',
+
+            'display_start.required' => "La date de début d'affichage est obligatoire.",
+            'display_start.date'     => "La date de début d'affichage doit être une date valide.",
+
+            'display_end.required'   => "La date de fin d'affichage est obligatoire.",
+            'display_end.date'       => "La date de fin d'affichage doit être une date valide.",
+            'display_end.after_or_equal' => "La date de fin d'affichage doit être égale ou postérieure à la date de début d'affichage.",
+
+            'is_active.boolean'      => "Le statut actif doit être de type booléen.",
+        ];
+    }
 }

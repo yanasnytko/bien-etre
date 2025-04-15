@@ -14,6 +14,25 @@
   <!-- Header -->
   @include('partials.header')
 
+  <!-- Affichage des notifications flash -->
+  @if(session('success'))
+    <div x-data="{ show: true }"
+         x-show="show"
+         x-init="setTimeout(() => show = false, 3000)"
+         class="fixed bottom-4 right-4 z-50 bg-green-500 text-white px-4 py-3 rounded shadow-lg">
+      {{ session('success') }}
+    </div>
+  @endif
+
+  @if(session('error'))
+    <div x-data="{ show: true }"
+         x-show="show"
+         x-init="setTimeout(() => show = false, 3000)"
+         class="fixed bottom-4 right-4 z-50 bg-red-500 text-white px-4 py-3 rounded shadow-lg">
+      {{ session('error') }}
+    </div>
+  @endif
+
   <!-- Section Hero (optionnelle, par exemple pour la page d'accueil) -->
   @hasSection('hero')
     @yield('hero')

@@ -39,9 +39,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [ProfileController::class, 'dashboard'])->name('dashboard');
 });
 
 Route::get('/test-email', function() {
@@ -58,6 +56,13 @@ Route::post('/test-register', function (\Illuminate\Http\Request $request) {
 Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('/user/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::patch('/user/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+    // Affiche le formulaire pour changer le mot de passe
+    Route::get('/user/password/edit', [ProfileController::class, 'editPassword'])->name('password.edit');
+
+    // Traite la soumission du formulaire de modification du mot de passe
+    Route::patch('/user/password', [ProfileController::class, 'updatePassword'])->name('password.update');
+
 });
 
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
