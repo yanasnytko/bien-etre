@@ -66,3 +66,5 @@ Route::post('/comments/{comment}/report', [CommentController::class, 'report'])-
 Route::middleware(['auth', 'can:manage-abuses'])->group(function () {
     Route::resource('abuses', AbuseController::class)->except(['create', 'store', 'edit']);
 });
+
+Route::get('/search', [ServiceProviderController::class, 'search'])->name('service-providers.search');

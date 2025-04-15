@@ -96,4 +96,14 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(\App\Models\Favorite::class);
     }
 
+    public function address()
+    {
+        return $this->hasOne(\App\Models\Address::class);
+    }
+
+    public function primaryAddress()
+    {
+        return $this->hasOne(\App\Models\Address::class)->where('is_primary', true);
+    }
+
 }
