@@ -178,5 +178,5 @@ Pour contribuer :
 
 5. Ouvre une Pull Request sur le dépôt principal.
 
-Licence
+## Licence
 Ce projet est sous licence de rien du tout, parce que c'est un projet d'études.
