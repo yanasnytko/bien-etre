@@ -11,6 +11,8 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CategorieProposalController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AbuseController;
+use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +41,8 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', [ProfileController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+         ->name('dashboard');
 });
 
 Route::get('/test-email', function() {
@@ -73,3 +76,7 @@ Route::middleware(['auth', 'can:manage-abuses'])->group(function () {
 });
 
 Route::get('/search', [ServiceProviderController::class, 'search'])->name('service-providers.search');
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/favorites/toggle', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
+});

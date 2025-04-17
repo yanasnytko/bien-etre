@@ -35,4 +35,10 @@ class Stage extends Model
     {
         return $this->belongsTo(ServiceProvider::class);
     }
+
+    public function favorites()
+    {
+        return $this->morphMany(\App\Models\Favorite::class, 'favoriteable');
+    }
+
 }

@@ -14,7 +14,8 @@ class ServiceProviderController extends Controller
      */
     public function index()
     {
-        $serviceProviders = ServiceProvider::paginate(12);
+        $serviceProviders = ServiceProvider::with('user.address.localite')
+                                       ->paginate(12);
         return view('service-providers.index', compact('serviceProviders'));
     }
 
@@ -105,39 +106,30 @@ class ServiceProviderController extends Controller
      */
     public function search(Request $request)
     {
-        // Commencer la requête sur le modèle ServiceProvider
         $query = ServiceProvider::query();
 
-        // Filtre par catégorie de service (on suppose que la relation "services" existe)
-        if ($request->filled('service_id')) {
-            $serviceId = $request->input('service_id');
+        // Filtre par service_id (pivot)
+        if ($serviceId = $request->input('service_id')) {
             $query->whereHas('services', function($q) use ($serviceId) {
                 $q->where('services.id', $serviceId);
             });
         }
 
-        // Filtre par localité
-        // On suppose ici que le prestataire a une relation vers son adresse ou localité
-        // Si vous avez une relation par exemple "address.localite"
-        if ($request->filled('localite')) {
-            $localite = $request->input('localite');
-            $query->whereHas('address.localite', function($q) use ($localite) {
-                $q->where('city', 'like', '%' . $localite . '%');
+        // Filtre par localisation (on cherche dans Localite::city)
+        if ($localite = $request->input('localite')) {
+            $query->whereHas('user.address.localite', function($q) use ($localite) {
+                $q->where('city', 'LIKE', "%{$localite}%");
             });
         }
 
         // Filtre par nom du prestataire
-        if ($request->filled('name')) {
-            $name = $request->input('name');
-            $query->where('company_name', 'like', '%' . $name . '%');
+        if ($name = $request->input('name')) {
+            $query->where('company_name', 'LIKE', "%{$name}%");
         }
 
-        // Si aucun critère n'est renseigné, la requête retourne tous les prestataires
-        // paginer les résultats (par exemple, 12 par page)
         $serviceProviders = $query->paginate(12);
+        $services         = \App\Models\Service::all();
 
-        // Retourner la vue index avec les prestataires filtrés.
-        // Vous pouvez utiliser la même vue que pour l'index classique.
-        return view('service-providers.index', compact('serviceProviders'));
+        return view('service-providers.index', compact('serviceProviders', 'services'));
     }
 }

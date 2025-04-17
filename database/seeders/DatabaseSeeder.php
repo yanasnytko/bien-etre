@@ -10,11 +10,11 @@ class DatabaseSeeder extends Seeder
     {
         // Appelle les seeders
         $this->call([
-            UserSeeder::class,
             LocaliteSeeder::class,
-            AddressSeeder::class,
+            UserSeeder::class,
             ServiceSeeder::class,
             ServiceProviderSeeder::class,
+            AddressSeeder::class,
             CategorieProposalSeeder::class,
             StageSeeder::class,
             PromotionSeeder::class,
@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             NewsletterSubscriptionSeeder::class,
             FavoriteSeeder::class,
             ImageSeeder::class,
+            ServiceProviderServiceSeeder::class,
         ]);
     }
 }

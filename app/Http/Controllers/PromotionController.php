@@ -29,8 +29,10 @@ class PromotionController extends Controller
 
     public function show($id)
     {
-        $promotion = Promotion::findOrFail($id);
-        return view('promotions.show', compact('promotion'));
+        $promo = Promotion::with('serviceProvider.user')
+                     ->findOrFail($id);
+
+        return view('promotions.show', ['promotion' => $promo]);
     }
 
     public function edit($id)

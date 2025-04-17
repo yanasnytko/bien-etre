@@ -18,8 +18,24 @@
         @endif
       </div>
       <!-- Détails du prestataire -->
-      <div class="md:w-2/3 md:pl-6 mt-4 md:mt-0">
-        <h1 class="text-2xl font-bold text-gray-800 mb-2">{{ $serviceProvider->company_name }}</h1>
+      <div class="md:w-2/3 md:pl-6 mt-4 md:mt-0" 
+           x-data="favoriteToggle({{ $serviceProvider->id }}, '{{ addslashes(\App\Models\ServiceProvider::class) }}')">
+
+        <div class="flex items-center justify-between">
+          <h1 class="text-2xl font-bold text-gray-800">
+            {{ $serviceProvider->company_name }}
+          </h1>
+
+          <!-- BOUTON FAVORI -->
+          @auth
+            <button
+              x-text="favorited ? '♥ Retirer' : '♡ Ajouter'"
+              :class="favorited ? 'text-red-500' : 'text-gray-500'"
+              @click="toggle()"
+              class="text-xl transition-colors duration-200"
+            ></button>
+          @endauth
+        </div>
         <p class="text-gray-600 mb-2"><strong>Email :</strong> {{ $serviceProvider->company_email }}</p>
         <p class="text-gray-600 mb-2"><strong>Téléphone :</strong> {{ $serviceProvider->telephone }}</p>
         <p class="text-gray-600 mb-2"><strong>Site Web :</strong> <a href="{{ $serviceProvider->website }}" class="text-blue-600 hover:underline">{{ $serviceProvider->website }}</a></p>
@@ -46,6 +62,8 @@
         
       </div>
     </div>
+    
+    <div id="map" style="height: 300px; margin-top:1.5rem;"></div>
   </div>
 
   <!-- Section des Stages -->
@@ -156,4 +174,87 @@
     </section>
 
 </div>
+
+<script>
+  function favoriteToggle(id, type) {
+    return {
+      favorited: @json(
+        auth()->check()
+          && auth()->user()->favorites()
+              ->where('favoriteable_type', $serviceProvider::class)
+              ->where('favoriteable_id', $serviceProvider->id)
+              ->exists()
+      ),
+
+      toggle() {
+        fetch("{{ route('favorites.toggle') }}", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept':       'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+          },
+          body: JSON.stringify({
+            favoriteable_id:   id,
+            favoriteable_type: type,
+          }),
+        })
+        .then(r => r.json())
+        .then(json => {
+          if (json.success) {
+            this.favorited = (json.action === 'added');
+          }
+        })
+        .catch(console.error);
+      }
+    }
+  }
+</script>
 @endsection
+@push('scripts')
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const mapContainer = document.getElementById('map');
+    const street   = @json(optional($serviceProvider->user->address)->street);
+    const city     = @json(optional($serviceProvider->user->address->localite)->city);
+    const postcode = @json(optional($serviceProvider->user->address->localite)->postal_code);
+    const addr = [street, postcode, city].filter(x => x).join(', ');
+
+    if (! addr) {
+      mapContainer.innerHTML = '<p class="text-red-600">Adresse non renseignée</p>';
+      return;
+    }
+    // const fullAddress = [street, postcode, city].filter(v => v).join(', ');
+    const fullAddress = "Chaussée d'Ixelles 27, 1050 Bruxelles, Belgique";
+    console.log('Adresse envoyée à Nominatim :', fullAddress);
+    console.log('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(fullAddress));
+
+    fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(fullAddress), {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'From': '{{ config("mail.from.address") }}'      // recommandé par Nominatim
+      }
+    })
+      .then(r => r.json())
+      .then(results => {
+        if (! results.length) {
+          mapContainer.innerHTML = '<p class="text-red-600">Coordonnées introuvables</p>';
+          return;
+        }
+        const { lat, lon } = results[0];
+        const map = L.map('map').setView([lat, lon], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+        L.marker([lat, lon])
+         .addTo(map)
+         .bindPopup(`<strong>{{ $serviceProvider->company_name }}</strong><br>${fullAddress}`)
+         .openPopup();
+      })
+      .catch(_ => {
+        mapContainer.innerHTML = '<p class="text-red-600">Erreur de géocodage</p>';
+      });
+  });
+</script>
+@endpush

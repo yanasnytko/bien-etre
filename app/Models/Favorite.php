@@ -11,7 +11,8 @@ class Favorite extends Model
 
     protected $fillable = [
         'user_id',
-        'service_provider_id',
+        'favoriteable_id',
+        'favoriteable_type',
     ];
 
     // Un favori appartient à un utilisateur.
@@ -20,9 +21,9 @@ class Favorite extends Model
         return $this->belongsTo(User::class);
     }
 
-    // Un favori appartient à un prestataire.
-    public function serviceProvider()
+    // Relation polymorphe qui retourne l'entité favorisée (peut être un ServiceProvider, Stage, Promotion, etc.)
+    public function favoriteable()
     {
-        return $this->belongsTo(ServiceProvider::class);
+        return $this->morphTo();
     }
 }
