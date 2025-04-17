@@ -8,6 +8,13 @@
   @vite('resources/js/app.js')
   <!-- Inclusion d'Alpine.js -->
   <script src="https://unpkg.com/alpinejs@3.x/dist/cdn.min.js" defer></script>
+
+  <link 
+    rel="stylesheet" 
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-sA+G6LQgPDgPE8hJXMwWzGTbVwWgnYzZnF21P0uAqtI=" 
+    crossorigin=""
+  />
 </head>
 <body class="font-sans antialiased bg-gray-50 text-gray-800">
 
@@ -45,6 +52,14 @@
 
   <!-- Footer -->
   @include('partials.footer')
+
+  
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-PiWcJcOCr3lG2ZV+PgfV/FnqdGHjG9nH6tMtCvxP1yk="
+    crossorigin=""
+  ></script>
+  @stack('scripts')
 
 </body>
 </html>

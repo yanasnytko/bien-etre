@@ -29,7 +29,9 @@ class StageController extends Controller
 
     public function show($id)
     {
-        $stage = Stage::findOrFail($id);
+        $stage = Stage::with('serviceProvider.user')  // on charge aussi l'user si besoin
+                  ->findOrFail($id);
+
         return view('stages.show', compact('stage'));
     }
 

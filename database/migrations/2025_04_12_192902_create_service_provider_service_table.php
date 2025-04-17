@@ -6,32 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('service_provider_service', function (Blueprint $table) {
-            $table->id();
             $table->unsignedBigInteger('service_provider_id');
             $table->unsignedBigInteger('service_id');
-            $table->timestamps();
-
             $table->foreign('service_provider_id')
-                  ->references('id')
-                  ->on('service_providers')
+                  ->references('id')->on('service_providers')
                   ->onDelete('cascade');
-
             $table->foreign('service_id')
-                  ->references('id')
-                  ->on('services')
+                  ->references('id')->on('services')
                   ->onDelete('cascade');
+            $table->primary(['service_provider_id','service_id']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('service_provider_service');

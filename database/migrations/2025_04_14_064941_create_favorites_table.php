@@ -6,32 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('favorites', function (Blueprint $table) {
             $table->id();
+            // Clé étrangère vers l'utilisateur
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('service_provider_id');
+
+            // Colonnes pour la relation polymorphe
+            $table->morphs('favoriteable'); // Crée favoriteable_id (unsignedBigInteger) et favoriteable_type (string)
+
             $table->timestamps();
 
             $table->foreign('user_id')
-                  ->references('id')
-                  ->on('users')
-                  ->onDelete('cascade');
-
-            $table->foreign('service_provider_id')
-                  ->references('id')
-                  ->on('service_providers')
+                  ->references('id')->on('users')
                   ->onDelete('cascade');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('favorites');

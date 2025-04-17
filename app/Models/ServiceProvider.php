@@ -50,4 +50,10 @@ class ServiceProvider extends Model
     {
         return $this->hasMany(\App\Models\Comment::class);
     }
+
+    public function favorites()
+    {
+        return $this->morphMany(\App\Models\Favorite::class, 'favoriteable');
+    }
+
 }
