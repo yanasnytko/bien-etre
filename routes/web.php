@@ -15,7 +15,6 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\UserAdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,10 +63,11 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::patch('/user/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     // Affiche le formulaire pour changer le mot de passe
-    Route::get('/user/password/edit', [ProfileController::class, 'editPassword'])->name('password.edit');
+    Route::get('/user/password/edit', [ProfileController::class, 'editPassword'])->name('user.password.edit');
 
     // Traite la soumission du formulaire de modification du mot de passe
-    Route::patch('/user/password', [ProfileController::class, 'updatePassword'])->name('password.update');
+    Route::patch('/user/password', [ProfileController::class, 'updatePassword'])
+     ->name('user.password.update');
 
 });
 
@@ -88,8 +88,5 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Dashboard de l’admin
     Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
-
-    // Gestion des utilisateurs
-    Route::resource('users', UserAdminController::class)->except(['show']);
     
 });

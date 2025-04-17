@@ -31,7 +31,7 @@
              class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
             Modifier le Profil
           </a>
-          <a href="{{ route('password.edit') }}"
+          <a href="{{ route('user.password.edit') }}"
              class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
             Changer le Mot de Passe
           </a>

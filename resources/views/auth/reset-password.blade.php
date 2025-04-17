@@ -5,7 +5,7 @@
   <div class="bg-white rounded-lg shadow p-6 w-full max-w-md">
     <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">Réinitialiser le Mot de Passe</h1>
 
-    <form method="POST" action="{{ route('password.update') }}">
+    <form method="POST" action="{{ route('user.password.update') }}">
       @csrf
 
       <!-- Le token de réinitialisation doit être inclus -->
