@@ -14,6 +14,14 @@
       <a href="{{ route('services.index') }}" class="text-gray-600 hover:text-blue-600">Services</a>
       <a href="{{ route('stages.index') }}" class="text-gray-600 hover:text-blue-600">Stages</a>
       <a href="{{ route('promotions.index') }}" class="text-gray-600 hover:text-blue-600">Promotions</a>
+      @auth
+        @if(auth()->user()->user_type === 'admin')
+          <a href="{{ route('admin.dashboard') }}"
+            class="text-gray-600 hover:text-red-600 font-semibold">
+            Administration
+          </a>
+        @endif
+      @endauth
     </nav>
 
     <!-- Boutons d'authentification Desktop -->
@@ -64,6 +72,13 @@
       <a href="{{ route('services.index') }}" class="text-gray-600 hover:text-blue-600">Services</a>
       <a href="{{ route('stages.index') }}" class="text-gray-600 hover:text-blue-600">Stages</a>
       <a href="{{ route('promotions.index') }}" class="text-gray-600 hover:text-blue-600">Promotions</a>
+      @auth
+        @if(auth()->user()->user_type === 'admin')
+          <a href="{{ route('admin.dashboard') }}" class="text-gray-600 hover:text-blue-600 ml-4">
+            Administration
+          </a>
+        @endif
+      @endauth
 
       @auth
         <a href="{{ route('dashboard') }}"

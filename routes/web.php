@@ -13,6 +13,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AbuseController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\UserAdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -79,4 +82,14 @@ Route::get('/search', [ServiceProviderController::class, 'search'])->name('servi
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/favorites/toggle', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
+});
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function(){
+
+    // Dashboard de l’admin
+    Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+    // Gestion des utilisateurs
+    Route::resource('users', UserAdminController::class)->except(['show']);
+    
 });
