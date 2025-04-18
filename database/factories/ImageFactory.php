@@ -10,8 +10,10 @@ class ImageFactory extends Factory
 
     public function definition()
     {
+        $imageId = rand(0, 1084);
+        $imageUrl = "https://picsum.photos/id/{$imageId}/400/300";
         return [
-            'path'  => $this->faker->imageUrl(400, 300, 'nature'),
+            'path'  => $imageUrl,
             // Si tu utilises un champ "type" en tant qu'ENUM, choisis-en une des valeurs autorisées
             'type'  => $this->faker->randomElement(['slider', 'profil', 'service', 'provider']),
             'name'  => $this->faker->word . '.jpg',

@@ -10,6 +10,8 @@ class StageFactory extends Factory
     
     public function definition()
     {
+        $imageId = rand(0, 1084);
+        $imageUrl = "https://picsum.photos/id/{$imageId}/400/300";
         return [
             // Relation vers ServiceProvider avec factory
             'service_provider_id' => \App\Models\ServiceProvider::factory(),
@@ -21,7 +23,7 @@ class StageFactory extends Factory
             'display_end'         => $this->faker->dateTimeBetween('now', '+1 years'),
             'cost'                => $this->faker->randomFloat(2, 10, 500),
             'currency'            => 'EUR',
-            'image'               => $this->faker->imageUrl(300, 200, 'education'),
+            'image'               => $imageUrl,
             'is_active'           => true,
         ];
     }
