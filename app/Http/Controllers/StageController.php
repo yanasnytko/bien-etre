@@ -16,7 +16,16 @@ class StageController extends Controller
 
     public function create()
     {
-        return view('stages.create');
+        // Récupérer le serviceProvider lié à l’utilisateur,
+        // ou abort(403) si l’utilisateur n’est pas prestataire
+        $user = auth()->user();
+        if (! $user || ! $user->is_provider || ! $user->serviceProvider) {
+            abort(403, 'Vous devez être prestataire pour créer un stage.');
+        }
+
+        $serviceProviderId = $user->serviceProvider->id;
+
+        return view('stages.create', compact('serviceProviderId'));
     }
 
     public function store(StoreStageRequest $request)

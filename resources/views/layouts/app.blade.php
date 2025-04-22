@@ -15,39 +15,6 @@
   @vite('resources/css/app.css')
   @vite('resources/js/app.js')
 
-  <script>
-    window.favoriteToggle = function(id, type) {
-      return {
-        favorited: @json(
-          auth()->check() 
-            && auth()->user()->favorites()
-                ->where('favoriteable_type', \App\Models\ServiceProvider::class)
-                ->where('favoriteable_id', $serviceProvider->id)
-                ->exists()
-        ),
-        toggle() {
-          fetch("{{ route('favorites.toggle') }}", {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept':       'application/json',
-              'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            },
-            body: JSON.stringify({
-              favoriteable_id:   id,
-              favoriteable_type: type,
-            }),
-          })
-          .then(r => r.json())
-          .then(json => {
-            if (json.success) this.favorited = (json.action === 'added');
-          })
-          .catch(console.error);
-        }
-      };
-    }
-  </script>
-
 </head>
 <body class="font-sans antialiased bg-gray-50 text-gray-800">
 
@@ -95,7 +62,7 @@
 
     <!-- Inclusion d'Alpine.js -->
   <script src="https://unpkg.com/alpinejs@3.x/dist/cdn.min.js" defer></script>
-  
+
   @stack('scripts')
 
 </body>

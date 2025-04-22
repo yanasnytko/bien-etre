@@ -23,7 +23,6 @@ class StoreStageRequest extends FormRequest
             'display_end'         => 'required|date|after_or_equal:display_start',
             'cost'                => 'nullable|numeric',
             'currency'            => 'required|string|max:10',
-            'image'               => 'nullable|string|max:255', // ou 'nullable|url' si c'est une URL
             'is_active'           => 'sometimes|boolean',
         ];
     }

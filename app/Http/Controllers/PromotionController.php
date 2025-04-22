@@ -16,7 +16,16 @@ class PromotionController extends Controller
 
     public function create()
     {
-        return view('promotions.create');
+        // Vérifier que l'utilisateur est prestataire
+        $user = auth()->user();
+        if (! $user || ! $user->is_provider || ! $user->serviceProvider) {
+            abort(403, 'Vous devez être prestataire pour créer une promotion.');
+        }
+
+        // ID du prestataire connecté
+        $serviceProviderId = $user->serviceProvider->id;
+
+        return view('promotions.create', compact('serviceProviderId'));
     }
 
     public function store(StorePromotionRequest $request)

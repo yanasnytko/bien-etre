@@ -46,14 +46,6 @@
   <section>
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-3xl font-bold text-gray-800">Nos Prestataires</h2>
-      @auth
-        @if(Auth::user()->is_provider)
-          <a href="{{ route('service-providers.create') }}"
-             class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
-            Ajouter un Prestataire
-          </a>
-        @endif
-      @endauth
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       @foreach($serviceProviders as $provider)

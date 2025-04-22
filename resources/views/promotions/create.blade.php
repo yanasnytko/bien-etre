@@ -21,6 +21,10 @@
     <form action="{{ route('promotions.store') }}" method="POST" enctype="multipart/form-data">
       @csrf
 
+      {{-- Liaison au prestataire connecté --}}
+      <input type="hidden" name="service_provider_id" 
+             value="{{ $serviceProviderId }}">
+
       <div class="mb-4">
         <label for="title" class="block font-semibold mb-1">Titre</label>
         <input type="text" name="title" id="title" value="{{ old('title') }}"
