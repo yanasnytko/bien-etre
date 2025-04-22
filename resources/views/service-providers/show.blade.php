@@ -1,39 +1,47 @@
+{{-- resources/views/service-providers/show.blade.php --}}
 @extends('layouts.app')
 
 @section('content')
+@php
+  // Préparation de l'adresse...
+  $user   = $serviceProvider->user;
+  $addr   = $user?->address;
+  $loc    = $addr?->localite;
+  $parts  = array_filter([$addr?->street, $loc?->postal_code, $loc?->city]);
+  $fullAddress = count($parts) ? implode(', ', $parts) : null;
+@endphp
+
 <div class="container mx-auto px-4 py-8">
-  <!-- Bouton de retour -->
-  <a href="{{ route('service-providers.index') }}" class="text-blue-600 hover:underline mb-4 inline-block">&larr; Retour</a>
+  <a href="{{ route('service-providers.index') }}" class="text-blue-600 hover:underline mb-4 inline-block">
+    &larr; Retour
+  </a>
 
   <div class="bg-white rounded-lg shadow p-6">
     <div class="flex flex-col md:flex-row">
-      <!-- Section image / logo -->
       <div class="md:w-1/3 flex-shrink-0">
         @if($serviceProvider->logo)
-          <img src="{{ $serviceProvider->logo }}" alt="{{ $serviceProvider->company_name }}" class="w-full h-auto rounded">
+          <img src="{{ $serviceProvider->logo }}"
+               alt="{{ $serviceProvider->company_name }}"
+               class="w-full h-auto rounded">
         @else
           <div class="w-full h-48 bg-gray-200 rounded flex items-center justify-center">
             <span class="text-gray-500">Pas d'image</span>
           </div>
         @endif
       </div>
-      <!-- Détails du prestataire -->
-      <div class="md:w-2/3 md:pl-6 mt-4 md:mt-0" 
+
+      <div class="md:w-2/3 md:pl-6 mt-4 md:mt-0"
            x-data="favoriteToggle({{ $serviceProvider->id }}, '{{ addslashes(\App\Models\ServiceProvider::class) }}')">
-
         <div class="flex items-center justify-between">
-          <h1 class="text-2xl font-bold text-gray-800">
-            {{ $serviceProvider->company_name }}
-          </h1>
-
-          <!-- BOUTON FAVORI -->
+          <h1 class="text-2xl font-bold text-gray-800">{{ $serviceProvider->company_name }}</h1>
           @auth
-            <button
-              x-text="favorited ? '♥ Retirer' : '♡ Ajouter'"
-              :class="favorited ? 'text-red-500' : 'text-gray-500'"
-              @click="toggle()"
-              class="text-xl transition-colors duration-200"
-            ></button>
+          <button
+            x-text="favorited ? '♥ Retirer' : '♡ Ajouter'"
+            :class="favorited ? 'text-red-500' : 'text-gray-500'"
+            @click="toggle()"
+            class="text-xl transition-colors duration-200"
+            title="Ajouter/Retirer des favoris">
+          </button>
           @endauth
         </div>
         <p class="text-gray-600 mb-2"><strong>Email :</strong> {{ $serviceProvider->company_email }}</p>
@@ -62,7 +70,7 @@
         
       </div>
     </div>
-    
+
     <div id="map" style="height: 300px; margin-top:1.5rem;"></div>
   </div>
 
@@ -174,87 +182,48 @@
     </section>
 
 </div>
-
-<script>
-  function favoriteToggle(id, type) {
-    return {
-      favorited: @json(
-        auth()->check()
-          && auth()->user()->favorites()
-              ->where('favoriteable_type', $serviceProvider::class)
-              ->where('favoriteable_id', $serviceProvider->id)
-              ->exists()
-      ),
-
-      toggle() {
-        fetch("{{ route('favorites.toggle') }}", {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept':       'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-          },
-          body: JSON.stringify({
-            favoriteable_id:   id,
-            favoriteable_type: type,
-          }),
-        })
-        .then(r => r.json())
-        .then(json => {
-          if (json.success) {
-            this.favorited = (json.action === 'added');
-          }
-        })
-        .catch(console.error);
-      }
-    }
-  }
-</script>
 @endsection
+
 @push('scripts')
-  <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const mapContainer = document.getElementById('map');
-    const street   = @json(optional($serviceProvider->user->address)->street);
-    const city     = @json(optional($serviceProvider->user->address->localite)->city);
-    const postcode = @json(optional($serviceProvider->user->address->localite)->postal_code);
-    const addr = [street, postcode, city].filter(x => x).join(', ');
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const mapContainer = document.getElementById('map');
+  // const address = @json($fullAddress);
+  const address = "Chaussée d'Ixelles 27, 1050 Bruxelles, Belgique";
 
-    if (! addr) {
-      mapContainer.innerHTML = '<p class="text-red-600">Adresse non renseignée</p>';
-      return;
-    }
-    // const fullAddress = [street, postcode, city].filter(v => v).join(', ');
-    const fullAddress = "Chaussée d'Ixelles 27, 1050 Bruxelles, Belgique";
-    console.log('Adresse envoyée à Nominatim :', fullAddress);
-    console.log('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(fullAddress));
+  if (!address) {
+    return mapContainer.innerHTML = '<p class="text-red-600">Adresse non renseignée</p>';
+  }
 
-    fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(fullAddress), {
-      method: 'GET',
+  fetch(
+    'https://nominatim.openstreetmap.org/search?format=json&q='
+    + encodeURIComponent(address),
+    {
       headers: {
         'Accept': 'application/json',
-        'From': '{{ config("mail.from.address") }}'      // recommandé par Nominatim
+        'From': '{{ config("mail.from.address") }}'
       }
-    })
-      .then(r => r.json())
-      .then(results => {
-        if (! results.length) {
-          mapContainer.innerHTML = '<p class="text-red-600">Coordonnées introuvables</p>';
-          return;
-        }
-        const { lat, lon } = results[0];
-        const map = L.map('map').setView([lat, lon], 13);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
-        L.marker([lat, lon])
-         .addTo(map)
-         .bindPopup(`<strong>{{ $serviceProvider->company_name }}</strong><br>${fullAddress}`)
-         .openPopup();
-      })
-      .catch(_ => {
-        mapContainer.innerHTML = '<p class="text-red-600">Erreur de géocodage</p>';
-      });
+    }
+  )
+  .then(res => res.json())
+  .then(results => {
+    if (!results.length) {
+      return mapContainer.innerHTML = '<p class="text-red-600">Coordonnées introuvables</p>';
+    }
+    const { lat, lon } = results[0];
+    const map = L.map('map').setView([lat, lon], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+    L.marker([lat, lon])
+     .addTo(map)
+     .bindPopup(`<strong>{{ addslashes($serviceProvider->company_name) }}</strong><br>${address}`)
+     .openPopup();
+  })
+  .catch(err => {
+    console.error(err);
+    mapContainer.innerHTML = '<p class="text-red-600">Erreur de géocodage</p>';
   });
+});
 </script>
 @endpush

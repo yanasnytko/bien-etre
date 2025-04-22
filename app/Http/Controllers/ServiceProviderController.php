@@ -117,8 +117,10 @@ class ServiceProviderController extends Controller
 
         // Filtre par localisation (on cherche dans Localite::city)
         if ($localite = $request->input('localite')) {
-            $query->whereHas('user.address.localite', function($q) use ($localite) {
-                $q->where('city', 'LIKE', "%{$localite}%");
+            $query->whereHas('user.address', function($q) use ($localite) {
+                $q->whereHas('localite', function($q2) use ($localite) {
+                    $q2->where('city','LIKE', "%{$localite}%");
+                });
             });
         }
 
